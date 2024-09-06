@@ -9,8 +9,13 @@ DISTDIR = dist
 # WRAP = -Wl,--wrap=malloc -Wl,--wrap=free -Wl,--wrap=calloc -Wl,--wrap=realloc -Wl,--wrap=malloc_usable_size
 
 # Compiler and linker flags
-CFLAGS := $(SCM) -Weverything -Werror -Wno-unsafe-buffer-usage -Wno-padded -Wno-declaration-after-statement -Wall -fPIC -g
-LFLAGS := $(CFLAGS) -lpthread
+WARNS := -Weverything -Werror -Wno-unused-parameter -Wno-cast-align -Wno-float-conversion -Wno-implicit-float-conversion -Wno-unsafe-buffer-usage -Wno-padded -Wno-declaration-after-statement -Wno-disabled-macro-expansion -Wall
+
+NIX_CFLAGS_COMPILE ?=
+NIX_LDFLAGS ?=-
+
+CFLAGS := $(NIX_CFLAGS_COMPILE) $(SCM) $(WARNS) -fPIC -g
+LFLAGS := $(NIX_LDFLAGS) $(CFLAGS) -lpthread -lm -l:libsoundio.so
 
 # Gathers all header and C files located in the root directory
 # in $(HFILES) and $(CFILES), respectively

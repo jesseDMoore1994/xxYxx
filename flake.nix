@@ -1,5 +1,5 @@
 {
-  description = "A .";
+  description = "xxYxx";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs";
@@ -23,6 +23,9 @@
           pkgs.valgrind
           libsoundio.packages.${system}.libsoundio.out
         ];
+        propigatedBuildInputs = [
+          pkgs.pkg-config
+        ];
         buildPhase = "make && valgrind --leak-check=yes ./dist/test";
         installPhase = ''
           mkdir -p $out/bin $out/lib
@@ -33,8 +36,9 @@
   in rec {
     defaultApp = inputs.utils.lib.mkApp { drv = defaultPackage; };
     defaultPackage = xxYxx;
+    libsound = libsoundio.packages.${system}.libsoundio.out;
     devShell = pkgs.mkShell {
-      buildInputs = [ pkgs.valgrind pkgs.clang libsoundio.packages.${system}.libsoundio.out ];
+      buildInputs = [ pkgs.valgrind pkgs.clang libsoundio.packages.${system}.libsoundio pkgs.pkg-config ];
     };
   });
 }
